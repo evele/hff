@@ -6,14 +6,13 @@ contract ConditionalTransfer {
         address sender;
         address receiver;
         uint256 amount;
-        bool isAuthorized;
+        bool exists;
     }
 
     mapping(uint256 => Transaction) public transactions;
     uint256 public transactionCount;
 
     event TransactionProposed(uint256 transactionId, address indexed sender, address indexed receiver, uint256 amount);
-    event TransactionAuthorized(uint256 transactionId, address indexed receiver);
     event TransactionExecuted(uint256 transactionId, address indexed sender, address indexed receiver, uint256 amount);
 
     // Propose a transaction
@@ -27,38 +26,28 @@ contract ConditionalTransfer {
             sender: msg.sender,
             receiver: _receiver,
             amount: _amount,
-            isAuthorized: false
+            exists: true
         });
 
         emit TransactionProposed(transactionCount, msg.sender, _receiver, _amount);
     }
 
-    // Authorize a transaction
-    function authorizeTransaction(uint256 _transactionId) external {
-        Transaction storage txn = transactions[_transactionId];
-        
-        require(txn.receiver == msg.sender, "Only the receiver can authorize this transaction");
-        require(!txn.isAuthorized, "Transaction has already been authorized");
-        require(txn.amount > 0, "Invalid transaction");
-
-        txn.isAuthorized = true;
-
-        emit TransactionAuthorized(_transactionId, msg.sender);
-    }
-
-    // Execute an authorized transaction
+    // Execute a transaction (authorization is implicit)
     function executeTransaction(uint256 _transactionId) external {
         Transaction storage txn = transactions[_transactionId];
 
-        require(txn.isAuthorized, "Transaction is not authorized");
+        require(txn.exists, "Transaction does not exist");
+        require(txn.receiver == msg.sender, "Only the receiver can execute this transaction");
         require(txn.amount > 0, "Invalid transaction");
 
         uint256 amount = txn.amount;
         address receiver = txn.receiver;
         address sender = txn.sender;
 
-        txn.amount = 0; // Prevent reentrancy
+        // Mark transaction as completed
+        txn.exists = false; 
 
+        // Transfer funds
         payable(receiver).transfer(amount);
 
         emit TransactionExecuted(_transactionId, sender, receiver, amount);
