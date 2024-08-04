@@ -1,6 +1,7 @@
 # Sendy
 
 # Description
+Este proyecto permite la autenticación y envío de mensajes encriptados utilizando carteras de Ethereum. Utiliza diversas librerías y proveedores para manejar la conectividad con carteras, la gestión de estados y las consultas de datos. La aplicación está diseñada para operar en la blockchain y permite a los usuarios enviar pagos condicionales de manera segura.
 
 # Disclaimer: 
     - Se encaró el proyecto en 3 partes 
