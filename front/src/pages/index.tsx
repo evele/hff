@@ -53,7 +53,7 @@ export default function App() {
         },
       );
     }
-  }, [account.address, formData.sendTo, publicClient, walletClient]);
+  }, [formData.sendTo, walletClient]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
