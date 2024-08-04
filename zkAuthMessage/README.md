@@ -1,7 +1,6 @@
 # zkAuthMessenger
-Mejorar
-Este proyecto permite la autenticación y envío de mensajes encriptados utilizando carteras de Ethereum. A continuación, se detallan los pasos para configurar y ejecutar la aplicación:
-Este proyecto permite la autenticación y envío de mensajes encriptados utilizando carteras de Ethereum. A continuación, se detallan los pasos para configurar y ejecutar la aplicación:
+A continuación, se detallan los pasos para configurar y ejecutar la aplicación:
+Este proyecto permite la autenticación y envío de mensajes encriptados utilizando wallets de Ethereum. A continuación, se detallan los pasos para configurar y ejecutar la aplicación:
 
 ### 1. Configuración del Entorno
 
