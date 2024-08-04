@@ -1,6 +1,4 @@
-import { ConditionalSigningTransferAbi } from '@/abi/ConditionalSigningTransfer';
 import { ConditionalTransferAbi } from '@/abi/ConditionalTransfer';
-import { publicClient, walletClient } from '@/client';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
-import { CONDITIONAL_SIGNING_TRANSFER_ADDRESS, CONDITIONAL_TRANSFER_ADDRESS } from '@/constants';
+import { CONDITIONAL_TRANSFER_ADDRESS } from '@/constants';
+import useCreateClient from '@/hooks/use-create-client';
 import { useEffect, useState } from 'react';
 import { getContract, parseEther } from 'viem';
 import { useAccount } from 'wagmi';
@@ -32,37 +31,36 @@ export default function App() {
     paymentStatus: 'waiting',
   });
 
-  const conditionalTransfer = getContract({
-    address: CONDITIONAL_TRANSFER_ADDRESS,
-    abi: ConditionalTransferAbi,
-    client: { public: publicClient, wallet: walletClient },
-  });
-
-  const conditionalSigningTransfer = getContract({
-    address: CONDITIONAL_SIGNING_TRANSFER_ADDRESS,
-    abi: ConditionalSigningTransferAbi,
-    client: publicClient,
-  });
+  const [contract, setContract] = useState<any>(null);
 
   const account = useAccount();
+  const { publicClient, walletClient } = useCreateClient();
 
   useEffect(() => {
-    conditionalTransfer.watchEvent.TransactionProposed(
-      { sender: account.address, receiver: formData.sendTo },
-      {
-        onLogs(logs) {
-          console.log(logs);
+    if (walletClient && publicClient) {
+      const contract = getContract({
+        address: CONDITIONAL_TRANSFER_ADDRESS,
+        abi: ConditionalTransferAbi,
+        client: { public: publicClient, wallet: walletClient },
+      });
+
+      contract.watchEvent.TransactionProposed(
+        { sender: account.address, receiver: formData.sendTo },
+        {
+          onLogs(logs) {
+            console.log(logs);
+          },
         },
-      },
-    );
-  }, [account.address]);
+      );
+    }
+  }, [account.address, formData.sendTo, publicClient, walletClient]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (conditionalTransfer && formData.sendTo && account.address) {
+    if (contract && formData.sendTo && account.address) {
       try {
-        const result = await conditionalTransfer.write.proposeTransaction(
+        const result = await contract.write.proposeTransaction(
           [formData.sendTo, parseEther(formData.amount)],
           {
             account: account.address,

@@ -13,8 +13,8 @@ export default function Header({}: Props) {
   }, [connectModalOpen]);
 
   return (
-    <div>
+    <header className="flex justify-end pt-2">
       <ConnectButton />
-    </div>
+    </header>
   );
 }
