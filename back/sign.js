@@ -11,9 +11,7 @@ async function main() {
 
     // Detalles de la transacción
     const tokenAddress = "0xC2283D397A487D827D780ceB2C55418284bBD702"; // Dirección del token LINK en Sepolia
-    // TODO: creo que acá en el spender hay un problema
-    // const spender = "0x8F0efdC1E4dAB65Fa91Ec938DCb0556f292D4410"; // Dirección del contrato que manejará el gasto
-    const spender = "0x023f20a018dbB5995Ea428e3E3f6498740C9F23C"; // Dirección del contrato que manejará el gasto
+    const spender = "0x8F0efdC1E4dAB65Fa91Ec938DCb0556f292D4410"; // Dirección del contrato que manejará el gasto
     const amount = ethers.utils.parseUnits("10", 18); // 10 LINK (asumiendo 18 decimales)
     
     // Crear una instancia del contrato de token
