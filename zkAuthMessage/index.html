@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZK Auth Messenger</title>
+</head>
+<body>
+    <h1>ZK Auth Messenger</h1>
+    <button id="connectWallet">Conectar Wallet</button>
+    <div id="app" style="display:none;">
+        <input type="email" id="emailInput" placeholder="Ingresa tu email">
+        <button id="register">Registrar</button>
+        <button id="authenticate">Autenticar</button>
+        <hr>
+        <input type="text" id="recipientAddress" placeholder="Dirección del destinatario">
+        <input type="text" id="messageContent" placeholder="Contenido del mensaje">
+        <button id="sendMessage">Enviar Mensaje</button>
+        <hr>
+        <button id="getMessages">Obtener Mis Mensajes</button>
+        <div id="messagesList"></div>
+    </div>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
